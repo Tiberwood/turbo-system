@@ -45,9 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fontawesome_free',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -110,29 +107,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# REST FRAMEWORK CONFIGURATION
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-    ),
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-      'rest_framework.permissions.IsAuthenticated',
-      #'user.rest_permissions.Permission.IsAdminUser',
-    ),
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.FileUploadParser',
-    ]
-}
+# Custom user model
+AUTH_USER_MODEL = 'app.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'America/Santiago'
 

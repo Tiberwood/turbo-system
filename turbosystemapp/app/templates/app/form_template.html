@@ -1,7 +1,12 @@
 {% for field in form %}
-<div class="form-group">
-  <label for="">{{ field.label_tag }}</label>
-  <input class="form-control">{{ field }}</input>
+<div class="form-group col-md-12">
+  <div class="col-md-10">
+    <span class="text-danger small">{{ field.errors }}</span>
+  </div>
+  <label for="val">{{ field.label_tag }}</label>
+  <div class="row">
+    <div class="col-md-12">{{ field }}</div>
+  </div>
 </div>
   {% comment %} <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
