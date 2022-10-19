@@ -12,4 +12,6 @@ urlpatterns = [
   re_path(r'^patients/$', views.patient_list, name='patient_list'),
   re_path(r'^doctors/$', views.doctor_list, name='doctor_list'),
   re_path(r'^(?P<user_id>[0-9]+)/profile/$', views.update_user, name='profile'),
+  re_path(r'^new-disease/$', views.create_diasese, name='create_disease'),
+  re_path(r'^upload-exams/$', views.upload_exam, name='upload_exam'),
 ]

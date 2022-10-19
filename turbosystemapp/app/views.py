@@ -4,6 +4,10 @@ from django.shortcuts import get_object_or_404
 from .forms.UserForm import UserForm
 from .forms.UpdateUserForm import UpdateUserForm
 from .forms.AccountForm import AccountForm
+from .forms.DiseaseForm import DiseaseForm
+from .forms.ExamForm import ExamForm
+from .models import Disease
+from .utils.validators import validate_file_extension
 
 def index(request):
   if not request.user.is_authenticated:
@@ -118,6 +122,54 @@ def update_user(request, user_id):
     'form': form,
   }
   return render(request, 'app/profile.html', context)
+
+
+def create_patient(request):
+  if not request.user.is_authenticated:
+    return render(request, 'app/login.html')
+  return render(request, 'app/register_patient.html')
+
+def create_diasese(request):
+  if not request.user.is_authenticated and request.user.is_admin:
+    return render(request, 'app/login.html')
+  disease = Disease.objects.get(name=form.cleaned_data['name'])
+  form = DiseaseForm(request.POST or None)
+  if disease:
+    context = {
+      'form': form,
+      'error_message': 'Disease already exists'
+    }
+    return render(request, 'app/register_disease.html', context)
+  if form.is_valid():
+    disease = form.save(commit=False)
+    disease.save()
+    return render(request, 'app/index.html')
+  context = {
+    'form': form,
+  }
+  return render(request, 'app/create_disease.html', context)
+
+def upload_exam(request):
+  if not request.user.is_authenticated:
+    return render(request, 'app/login.html')
+  form = ExamForm(request.POST or None, request.FILES or None)
+  if form.is_valid():
+    try:
+      import pdb; pdb.set_trace()
+      if validate_file_extension(request.FILES['file'].name):
+        exam = form.save(commit=False)
+        exam.save()
+        return render(request, 'app/index.html')
+    except:
+      context = {
+        'form': form,
+        'error_message': 'Invalid file'
+      }
+      return render(request, 'app/upload_exam.html', context)
+  context = {
+    'form': form,
+  }
+  return render(request, 'app/upload_exam.html', context)
 
 def doctor_list(request):
   if not request.user.is_authenticated:

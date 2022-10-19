@@ -55,7 +55,7 @@ class Doctor(models.Model):
 class Patient(models.Model):
   name = models.CharField(max_length=250)
   last_name = models.CharField(max_length=250)
-  birthday = models.DateField()
+  birthday = models.DateField(null=True, blank=True)
   disease = models.ManyToManyField(Disease)
   exams = models.ManyToManyField(Exam, related_name='exams')
   
