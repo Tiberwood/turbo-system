@@ -1,6 +1,11 @@
 from django.shortcuts import render
-from .forms.DiseaseForm import DiseaseForm
-from .models import Disease
+from ..models import Disease
+from ..forms.DiseaseForm import DiseaseForm
+
+def index(request):
+  if not request.user.is_authenticated:
+    return render(request, 'app/login.html')
+  return render(request, 'app/index.html')
 
 def create_diasese(request):
   if not request.user.is_authenticated and request.user.is_admin:

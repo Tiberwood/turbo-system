@@ -123,10 +123,12 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+                        {% if user.is_superuser or user.is_doctor %}
                         <li>
                             <a href="{% url 'app:patient_list' %}"><i class="fa fa-table fa-fw"></i> Patients</a>
                         </li>
-                        {% if user.is_superuser %}
+                        {% endif %}
+                        {% if user.is_superuser or user.is_patient %}
                         <li>
                             <a href="{%  url 'app:doctor_list' %}"><i class="fa fa-edit fa-fw"></i> Doctors</a>
                         </li>
@@ -191,9 +193,9 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-
+        <div id="page-wrapper">
         {% block body %}{% endblock %}
-
+        </div>
     </div>
     <!-- /#wrapper -->
 

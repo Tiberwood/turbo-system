@@ -1,9 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+WORKING_DAYS = [
+  ('MONDAY', 'Monday'),
+  ('TUESDAY', 'Tuesday'),
+  ('WEDNESDAY', 'Wednesday'),
+  ('THURSDAY', 'Thursday'),
+  ('FRIDAY', 'Friday'),
+  ('SATURDAY', 'Saturday'),
+  ('SUNDAY', 'Sunday'),
+]
+
 class User(AbstractUser):
   is_doctor = models.BooleanField(default=False)
   is_patient = models.BooleanField(default=False)
+  dni = models.CharField(max_length=8, help_text='Identification', null=True, blank=True)
   
   def __str__(self):
     return self.username + ' ' + self.email
@@ -52,12 +63,44 @@ class Doctor(models.Model):
     full_name = '%s %s' % (self.first_name, self.last_name)
     return full_name.strip()
 
+class AppointmentConfiguration(models.Model):
+  doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+  working_day = models.CharField(max_length=50, choices=WORKING_DAYS)
+  start_time = models.TimeField()
+  end_time = models.TimeField()
+  
+  def __str__(self):
+    return self.doctor.get_full_name() + self.day + self.start_time + self.end_time
+
+class Item(models.Model):
+  name = models.CharField(max_length=50)
+  description = models.CharField(max_length=100)
+  price = models.DecimalField(max_digits=19, decimal_places=2)
+  
+  def __str__(self):
+    return self.name
+  
+class Prescription(models.Model):
+  name = models.CharField(max_length=50)
+  description = models.CharField(max_length=100)
+  items = models.ManyToManyField(Item, related_name='items')
+  
+  def __str__(self):
+    return self.name
+
+class Diagnostic(models.Model):
+  patient = models.ForeignKey(User, on_delete=models.CASCADE)
+  description = models.CharField(max_length=100, null=True, blank=True)
+  recepient = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+  exams = models.ManyToManyField(Exam, related_name='exams')
+  prescription = models.ForeignKey('Prescription', on_delete=models.CASCADE, blank=True, null=True)
+
 class Patient(models.Model):
   name = models.CharField(max_length=250)
   last_name = models.CharField(max_length=250)
   birthday = models.DateField(null=True, blank=True)
-  disease = models.ManyToManyField(Disease)
-  exams = models.ManyToManyField(Exam, related_name='exams')
+  dni = models.CharField(max_length=20, null=True, blank=True)
+  diagnostics = models.ManyToManyField(Diagnostic, related_name='diagnostics')
   
   def __str__(self):
     return self.name
@@ -65,11 +108,12 @@ class Patient(models.Model):
   def get_full_name(self):
     full_name = '%s %s' % (self.first_name, self.last_name)
     return full_name.strip()
-  
+
 class Appointment(models.Model):
   date = models.DateTimeField()
   doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-  patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+  patient = models.ForeignKey(Patient, on_delete=models.CASCADE) 
   
   def __str__(self):
     return self.date + self.doctor.get_full_name() + self.patient.get_full_name()
+  

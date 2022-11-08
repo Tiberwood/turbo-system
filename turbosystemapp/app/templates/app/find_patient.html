@@ -1,0 +1,23 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="panel-body">
+      <form role="form" action="" method="get" enctype="multipart/form-data">
+        {{ filter.form.as_p }}
+        <div class="form-group input-group">
+          <input type="text" class="form-control">
+          <span class="input-group-btn">
+              <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
+              </button>
+          </span>
+        </div>
+      </form>
+      {% for obj in filter.qs %}
+        {{ obj.first_name }} {{ obj.last_name }} |
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,17 +1,16 @@
-{% extends 'app/base.html' %}
-{% block title %}Profile{% endblock %}
+{% extends 'app/base_visitor.html' %}
+
+{% block title %}Register{% endblock %}
 
 {% block body %}
-<div class="row">
-	<div class="col-lg-12">
-			<h1 class="page-header">Profile</h1>
-	</div>
-	<!-- /.col-lg-12 -->
-</div>
+
 <div class="container">
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4">
 				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Register New User</h3>
+					</div>
 					{% if error_message %}
 						<p><strong>{{ error_message }}</strong></p>
 					{% endif %}
@@ -21,7 +20,7 @@
 							<fieldset>
 								{% include 'app/form_template.html' %}
 								<div class="form-group col-md-12">
-									<button type="submit" class="btn btn-lg btn-success btn-block">Update profile</button>
+									<button type="submit" class="btn btn-lg btn-success btn-block">Create Account</button>
 								</div>
 							</fieldset>
 						</form>

@@ -1,0 +1,73 @@
+from django.shortcuts import render
+from django.contrib.auth import get_user_model
+
+from ..models import Patient
+
+from ..forms.PatientForm import PatientForm
+from ..forms.ExamForm import ExamForm
+
+from ..filters.PatientFilter import PatientFilter
+
+from ..utils.validators import validate_file_extension
+
+
+def patient_list(request):
+  if not request.user.is_authenticated:
+    return render(request, 'app/login.html')
+  user_model = get_user_model()
+  if request.user.is_superuser:
+    patients = user_model.objects.filter(is_patient=True)
+    context = {
+      'patients': patients
+    }
+    return render(request, 'app/patient_list.html', context)
+  if request.user.is_doctor:
+    doctor_instance = user_model.objects.get(pk=request.user.id)
+    patients = Patient.objects.filter(diagnostics__recepient=doctor_instance.pk)
+    context = {
+      'patients': patients
+    }
+    return render(request, 'app/patient_list.html', context)
+  
+def create_patient(request):
+  if not request.user.is_authenticated:
+    return render(request, 'app/login.html')
+  user_model = get_user_model()
+  # patient = get_object_or_404(user_model, email=form.cleaned_data['email'])
+  form = PatientForm(request.POST or None)
+  if form.is_valid():
+    patient = form.save(commit=False)
+    patient.save()
+    return render(request, 'app/index.html', { 'message': 'Patient created successfully' })
+  
+  context = {
+    'form': form,
+  }  
+  return render(request, 'app/register_patient.html', context)
+
+def upload_exam(request):
+  if not request.user.is_authenticated:
+    return render(request, 'app/login.html')
+  form = ExamForm(request.POST or None, request.FILES or None)
+  if form.is_valid():
+    try:
+      if validate_file_extension(request.FILES['file'].name):
+        exam = form.save(commit=False)
+        exam.save()
+        return render(request, 'app/index.html', { 'message': 'Exam created successfully' })
+    except:
+      context = {
+        'form': form,
+        'error_message': 'Invalid file'
+      }
+      return render(request, 'app/upload_exam.html', context)
+  context = {
+    'form': form,
+  }
+  return render(request, 'app/upload_exam.html', context)
+
+def find_patient(request):
+  user_model = get_user_model()
+  import pdb; pdb.set_trace()
+  filter = PatientFilter(request.GET, queryset=user_model.objects.filter(is_patient=True))
+  return render(request, 'app/find_patient.html', {'filter': filter})
