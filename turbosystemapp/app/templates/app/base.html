@@ -29,6 +29,12 @@
 
     <script src="{% static 'fontawesome_free/js/all.min.js' %}"></script>
 
+    <!-- DataTables CSS -->
+    <link href="{% static 'app/vendor/datatables-plugins/dataTables.bootstrap.css' %}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{% static 'app/vendor/datatables-responsive/dataTables.responsive.css' %}" rel="stylesheet">
+
     <!-- End Styles -->
 
 
@@ -53,6 +59,18 @@
     <!-- Custom Theme JavaScript -->
     <script src="{% static 'app/js/sb-admin-2.js' %}"></script>
 
+    <!-- DataTables JavaScript -->
+    <script src="{% static 'app/vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'app/vendor/datatables-plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'app/vendor/datatables-responsive/dataTables.responsive.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#patientTable').DataTable({
+                responsive: true
+            });
+        });
+    </script>
     <!-- End scripts -->
 
 </head>
@@ -141,9 +159,9 @@
                                 <li>
                                     <a href="{% url 'app:create_disease' %}">Diseases</a>
                                 </li>
-                                <li>
+                                {% comment %} <li>
                                     <a href="{% url 'app:upload_exam' %}">Upload Exams</a>
-                                </li>
+                                </li> {% endcomment %}
                                 <li>
                                     <a href="typography.html">Typography</a>
                                 </li>

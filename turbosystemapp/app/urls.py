@@ -1,6 +1,6 @@
 from django.urls import re_path
 from .views.PatientView import patient_list, create_patient, upload_exam, find_patient
-from .views.DoctorView import doctor_list
+from .views.DoctorView import doctor_list, create_diagnostic
 from .views.UserView import register, register_account, login_view, update_user, logout_view
 from .views.HomeView import index, create_diasese
 
@@ -16,7 +16,8 @@ urlpatterns = [
   re_path(r'^doctors/$', doctor_list, name='doctor_list'),
   re_path(r'^(?P<user_id>[0-9]+)/profile/$', update_user, name='profile'),
   re_path(r'^new-disease/$', create_diasese, name='create_disease'),
-  re_path(r'^upload-exams/$', upload_exam, name='upload_exam'),
+  re_path(r'^upload-exams/(?P<diagnostic_id>[0-9]+)/$', upload_exam, name='upload_exam'),
   re_path(r'^register-patient/$', create_patient, name='register_patient'),
+  re_path(r'^create-diagnostic/(?P<patient_id>[0-9]+)/$', create_diagnostic, name='create_diagnostic'),
   re_path(r'^find-patient/$', find_patient, name='find_patient'),
 ]

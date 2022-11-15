@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 
-from ..models import Patient
+from ..models import Patient, Diagnostic
 
 from ..forms.PatientForm import PatientForm
 from ..forms.ExamForm import ExamForm
@@ -45,7 +45,7 @@ def create_patient(request):
   }  
   return render(request, 'app/register_patient.html', context)
 
-def upload_exam(request):
+def upload_exam(request, diagnostic_id):
   if not request.user.is_authenticated:
     return render(request, 'app/login.html')
   form = ExamForm(request.POST or None, request.FILES or None)
@@ -54,7 +54,12 @@ def upload_exam(request):
       if validate_file_extension(request.FILES['file'].name):
         exam = form.save(commit=False)
         exam.save()
+        diagnostic_instante = Diagnostic.objects.get(pk=diagnostic_id)
+        diagnostic_instante.exams.add(exam)
+        diagnostic_instante.save()
         return render(request, 'app/index.html', { 'message': 'Exam created successfully' })
+    except Diagnostic.DoesNotExist:
+      return render(request, 'app/upload_exam.html', { 'message': 'Diagnostic does not exist' })
     except:
       context = {
         'form': form,
@@ -65,6 +70,15 @@ def upload_exam(request):
     'form': form,
   }
   return render(request, 'app/upload_exam.html', context)
+
+def patient_diagnostics(request, patient_id):
+  if not request.user.is_authenticated:
+    return render(request, 'app/login.html')
+  diagnostics = Diagnostic.objects.filter(patient=patient_id)
+  context = {
+    'diagnostics': diagnostics
+  }
+  return render(request, 'app/patient_diagnostics.html', context)
 
 def find_patient(request):
   user_model = get_user_model()

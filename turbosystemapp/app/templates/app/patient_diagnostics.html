@@ -1,0 +1,26 @@
+{% extends 'app/base.html' %}
+{% block title %} Patient Diagnostics {% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Patient Diagnostics</h1>
+      <p>Here you can view the diagnostics of the patient.</p>
+    </div>
+    {% for diagnostic in diagnostics %}
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ diagnostic.name }}</h5>
+          <p class="card-text">{{ diagnostic.description }}</p>
+          {% comment %} <a href="{% url 'diagnostic-detail' diagnostic.id %}" class="btn btn-primary">View</a> {% endcomment %}
+        </div>
+      </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% endblock %}

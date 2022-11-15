@@ -90,17 +90,16 @@ class Prescription(models.Model):
 
 class Diagnostic(models.Model):
   patient = models.ForeignKey(User, on_delete=models.CASCADE)
-  description = models.CharField(max_length=100, null=True, blank=True)
+  description = models.TextField(null=True, blank=True)
   recepient = models.ForeignKey(Doctor, on_delete=models.CASCADE)
   exams = models.ManyToManyField(Exam, related_name='exams')
-  prescription = models.ForeignKey('Prescription', on_delete=models.CASCADE, blank=True, null=True)
+  prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE, blank=True, null=True)
 
 class Patient(models.Model):
   name = models.CharField(max_length=250)
   last_name = models.CharField(max_length=250)
   birthday = models.DateField(null=True, blank=True)
   dni = models.CharField(max_length=20, null=True, blank=True)
-  diagnostics = models.ManyToManyField(Diagnostic, related_name='diagnostics')
   
   def __str__(self):
     return self.name
