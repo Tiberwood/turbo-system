@@ -26,19 +26,20 @@
                         <tbody>
                           {% for patient in patients %}
                           <tr>
-                              <td><a href="{% url 'app:profile' patient.id %}">{{ patient.username }}</a></td>
+                              <td>{{ patient.username }}</a></td>
                               <td>{{ patient.first_name }}</td>
                               <td>{{ patient.last_name }}</td>
                               <td>{{ patient.email }}</td>
                               <td>
                                 <a href="{% url 'app:create_diagnostic' patient.id %}" class="btn btn-success btn-xs">Create Diagnose</a>
-                                <a href="{% url 'app:create_diagnostic' patient.id %}" class="btn btn-primary btn-xs"> View Diagnostics</a>
+                                <a href="{% url 'app:patient_diagnostics' patient.id %}" class="btn btn-primary btn-xs"> View Diagnostics</a>
                                 {% if patient.id == user.id %}
                                 <a href="{% url 'app:profile' patient.id %}" class="btn btn-primary btn-xs">Edit</a>
                                 {% endif %}
-                                {% if user.is_superuser or patient.id == user.id %}
+                                {% if user.is_superuser %}
                                 <a href="#" class="btn btn-danger btn-xs">Delete</a>
                                 {% endif %}
+                              </td>
                             </tr>
                           {% endfor %}
                         </tbody>

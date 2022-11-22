@@ -8,11 +8,43 @@
       <h1>Patient Diagnostics</h1>
       <p>Here you can view the diagnostics of the patient.</p>
     </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+          <div class="table-responsive">
+              <table width="100%" class="table table-striped table-bordered table-hover" id="patientTable">
+                  <thead>
+                    <tr>
+                      <th>Doctor Name</th>
+                      <th>Doctor Last Name</th>
+                      <th>Doctor Email</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for diagnostic in diagnostics %}
+                    <tr>
+                      <td>{{ diagnostic.recepient.first_name }}</td>
+                      <td>{{ diagnostic.recepient.last_name }}</td>
+                      <td>{{ diagnostic.recepient.email }}</td>
+                      <td>
+                        <a href="{% url 'app:upload_exam' diagnostic.id %}" class="btn btn-success btn-xs">Upload exam</a>
+                        <a href="{% url 'app:patient_exams' diagnostic.patient.id diagnostic.id %}" class="btn btn-primary btn-xs"> View Exams</a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+          <!-- /.table-responsive -->
+      </div>
+      <!-- /.panel-body -->
+  </div>
     {% for diagnostic in diagnostics %}
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">{{ diagnostic.name }}</h5>
+          <h5 class="card-title">{{ diagnostic.patient.first_name }}</h5>
           <p class="card-text">{{ diagnostic.description }}</p>
           {% comment %} <a href="{% url 'diagnostic-detail' diagnostic.id %}" class="btn btn-primary">View</a> {% endcomment %}
         </div>

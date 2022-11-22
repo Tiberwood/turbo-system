@@ -91,7 +91,7 @@ class Prescription(models.Model):
 class Diagnostic(models.Model):
   patient = models.ForeignKey(User, on_delete=models.CASCADE)
   description = models.TextField(null=True, blank=True)
-  recepient = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+  recepient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor')
   exams = models.ManyToManyField(Exam, related_name='exams')
   prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE, blank=True, null=True)
 

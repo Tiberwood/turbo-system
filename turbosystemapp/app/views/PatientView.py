@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
 
 from ..models import Patient, Diagnostic
@@ -70,6 +70,23 @@ def upload_exam(request, diagnostic_id):
     'form': form,
   }
   return render(request, 'app/upload_exam.html', context)
+
+def exam_list(request, patient_id, diagnostic_id):
+  if not request.user.is_authenticated:
+    return render(request, 'app/login.html')
+  try:
+    user_model = get_user_model()
+    patient = get_object_or_404(user_model, pk=patient_id)
+    diagnostic = get_object_or_404(Diagnostic, pk=diagnostic_id)
+  except user_model.DoesNotExist:
+    return render(request, 'app/exam_list.html', { 'message': 'Patient does not exist' })
+  
+  context = {
+    'patient': patient,
+    'exams': diagnostic.exams.all(),
+    'diagnostic': diagnostic,
+  }
+  return render(request, 'app/exam_list.html', context)
 
 def patient_diagnostics(request, patient_id):
   if not request.user.is_authenticated:
